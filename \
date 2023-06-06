@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Server Monitor</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .online {
+      color: green;
+    }
+    .offline {
+      color: red;
+    }
+  </style>
+  <script>
+    window.onload = function() {
+      var serverStatusElement = document.getElementById('server-status');
+
+      // Function to get the server status
+      function getServerStatus(serverIP, callback) {
+        // Simulate an asynchronous server request
+        setTimeout(function() {
+          var isServerOnline = Math.random() < 0.8; // Randomly simulate server status
+
+          // Execute the callback function with the server status
+          callback(serverIP, isServerOnline);
+
+          // Schedule the next status check
+          setTimeout(function() {
+            getServerStatus(serverIP, callback);
+          }, 5000); // Check every 5 seconds
+        }, 2000); // Simulate 2-second server request delay
+      }
+
+      // Function to update the server status in the table
+      function updateServerStatus(serverIP, isOnline) {
+        var row = document.getElementById('row-' + serverIP);
+        var statusCell = row.getElementsByClassName('status')[0];
+
+        if (isOnline) {
+          statusCell.textContent = 'Online';
+          statusCell.className = 'status online';
+        } else {
+          statusCell.textContent = 'Offline';
+          statusCell.className = 'status offline';
+        }
+      }
+
+      // Start checking the server status when the page loads
+      var serverIPs = ['192.168.1.66', '192.168.1.68'];
+
+      serverIPs.forEach(function(serverIP) {
+        var table = document.getElementById('server-table');
+        var row = table.insertRow();
+        row.id = 'row-' + serverIP;
+
+        var ipCell = row.insertCell();
+        ipCell.textContent = serverIP;
+
+        var statusCell = row.insertCell();
+        statusCell.className = 'status';
+        statusCell.textContent = 'Loading...';
+
+        getServerStatus(serverIP, updateServerStatus);
+      });
+    };
+  </script>
+</head>
+<body>
+  <h1>Server Monitor</h1>
+  <table id="server-table">
+    <tr>
+      <th>Server IP</th>
+      <th>Status</th>
+    </tr>
+  </table>
+</body>
+</html>
+
