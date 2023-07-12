@@ -1,14 +1,6 @@
 pipeline {
   agent any
-
-  stages {
-    stage('Clone') {
-      steps {
-        git 'https://github.com/krishnaprasadnr702119/Backup.git'
-      }
-    }
-    
-    stage('Build') {
+   stage('Build') {
       steps {
         sh 'cd Backup && ./build.sh'
       }
